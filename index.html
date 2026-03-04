@@ -1,987 +1,642 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>New Favourite Salon</title>
-  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Jost:wght@200;300;400;500&display=swap" rel="stylesheet"/>
-  <style>
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
-    :root {
-      --cream: #f9f4ee;
-      --blush: #e8c4b0;
-      --rose: #c9836a;
-      --deep: #2c1a14;
-      --gold: #b8965a;
-      --soft: #f3ece4;
-      --muted: #8a6a5e;
-    }
-
-    html { scroll-behavior: smooth; }
-
-    body {
-      font-family: 'Jost', sans-serif;
-      background: var(--cream);
-      color: var(--deep);
-      overflow-x: hidden;
-    }
-
-    /* ── NAV ── */
-    nav {
-      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
-      display: flex; align-items: center; justify-content: space-between;
-      padding: 1.4rem 4rem;
-      background: rgba(249,244,238,0.92);
-      backdrop-filter: blur(12px);
-      border-bottom: 1px solid rgba(184,150,90,0.2);
-      transition: all 0.3s;
-    }
-
-    .logo {
-      font-family: 'Cormorant Garamond', serif;
-      font-size: 1.7rem;
-      font-weight: 600;
-      letter-spacing: 0.04em;
-      color: var(--deep);
-      text-decoration: none;
-    }
-
-    .logo span { color: var(--rose); font-style: italic; }
-
-    .nav-links { display: flex; gap: 2.5rem; list-style: none; }
-
-    .nav-links a {
-      font-size: 0.78rem;
-      letter-spacing: 0.18em;
-      text-transform: uppercase;
-      color: var(--muted);
-      text-decoration: none;
-      font-weight: 400;
-      transition: color 0.2s;
-      cursor: pointer;
-    }
-
-    .nav-links a:hover, .nav-links a.active { color: var(--rose); }
-
-    /* ── PAGES ── */
-    .page { display: none; padding-top: 80px; min-height: 100vh; }
-    .page.active { display: block; }
-
-    /* ── HOME ── */
-    .hero {
-      position: relative;
-      height: calc(100vh - 80px);
-      display: flex; align-items: center;
-      overflow: hidden;
-      background: var(--cream);
-    }
-
-    .hero-bg {
-      position: absolute; inset: 0;
-      background:
-        radial-gradient(ellipse 60% 80% at 70% 50%, rgba(232,196,176,0.35) 0%, transparent 70%),
-        radial-gradient(ellipse 40% 60% at 20% 30%, rgba(201,131,106,0.12) 0%, transparent 60%);
-    }
-
-    .hero-deco {
-      position: absolute; right: 0; top: 0; bottom: 0; width: 45%;
-      background: linear-gradient(135deg, var(--blush) 0%, #d4a08a 100%);
-      clip-path: polygon(15% 0, 100% 0, 100% 100%, 0% 100%);
-      opacity: 0.25;
-    }
-
-    .hero-circle {
-      position: absolute; right: 8%; top: 50%; transform: translateY(-50%);
-      width: 420px; height: 420px;
-      border-radius: 50%;
-      background: linear-gradient(145deg, var(--blush), var(--rose));
-      opacity: 0.18;
-      animation: pulse 6s ease-in-out infinite;
-    }
-
-    @keyframes pulse {
-      0%, 100% { transform: translateY(-50%) scale(1); }
-      50% { transform: translateY(-50%) scale(1.06); }
-    }
-
-    .hero-content {
-      position: relative; z-index: 2;
-      padding: 0 4rem;
-      animation: fadeUp 1s ease both;
-    }
-
-    @keyframes fadeUp {
-      from { opacity: 0; transform: translateY(30px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-
-    .hero-tag {
-      font-size: 0.7rem;
-      letter-spacing: 0.3em;
-      text-transform: uppercase;
-      color: var(--gold);
-      margin-bottom: 1.2rem;
-      display: flex; align-items: center; gap: 0.8rem;
-    }
-
-    .hero-tag::before {
-      content: '';
-      display: inline-block;
-      width: 40px; height: 1px;
-      background: var(--gold);
-    }
-
-    h1 {
-      font-family: 'Cormorant Garamond', serif;
-      font-size: clamp(3.5rem, 7vw, 6rem);
-      font-weight: 300;
-      line-height: 1.05;
-      color: var(--deep);
-      margin-bottom: 1.5rem;
-    }
-
-    h1 em {
-      font-style: italic;
-      color: var(--rose);
-    }
-
-    .hero-sub {
-      font-size: 0.95rem;
-      font-weight: 300;
-      color: var(--muted);
-      max-width: 420px;
-      line-height: 1.8;
-      margin-bottom: 2.5rem;
-      letter-spacing: 0.02em;
-    }
-
-    .btn {
-      display: inline-flex; align-items: center; gap: 0.7rem;
-      padding: 1rem 2.2rem;
-      background: var(--deep);
-      color: var(--cream);
-      font-family: 'Jost', sans-serif;
-      font-size: 0.72rem;
-      font-weight: 400;
-      letter-spacing: 0.2em;
-      text-transform: uppercase;
-      border: none; cursor: pointer;
-      text-decoration: none;
-      transition: all 0.3s;
-    }
-
-    .btn:hover { background: var(--rose); transform: translateY(-2px); }
-
-    .btn-outline {
-      background: transparent;
-      border: 1px solid var(--deep);
-      color: var(--deep);
-      margin-left: 1rem;
-    }
-
-    .btn-outline:hover { background: var(--deep); color: var(--cream); }
-
-    /* Services */
-    .section {
-      padding: 6rem 4rem;
-    }
-
-    .section-label {
-      font-size: 0.68rem;
-      letter-spacing: 0.3em;
-      text-transform: uppercase;
-      color: var(--gold);
-      margin-bottom: 0.8rem;
-    }
-
-    .section-title {
-      font-family: 'Cormorant Garamond', serif;
-      font-size: clamp(2rem, 4vw, 3rem);
-      font-weight: 300;
-      color: var(--deep);
-      margin-bottom: 3rem;
-    }
-
-    .section-title em { font-style: italic; color: var(--rose); }
-
-    .services-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-      gap: 2rem;
-    }
-
-    .service-card {
-      background: white;
-      padding: 2.5rem 2rem;
-      border-bottom: 3px solid transparent;
-      transition: all 0.35s;
-      position: relative;
-      overflow: hidden;
-    }
-
-    .service-card::before {
-      content: '';
-      position: absolute; bottom: 0; left: 0; right: 0;
-      height: 3px;
-      background: linear-gradient(90deg, var(--rose), var(--gold));
-      transform: scaleX(0);
-      transition: transform 0.35s;
-      transform-origin: left;
-    }
-
-    .service-card:hover { transform: translateY(-6px); box-shadow: 0 20px 50px rgba(44,26,20,0.1); }
-    .service-card:hover::before { transform: scaleX(1); }
-
-    .service-icon {
-      font-size: 2rem;
-      margin-bottom: 1rem;
-    }
-
-    .service-card h3 {
-      font-family: 'Cormorant Garamond', serif;
-      font-size: 1.4rem;
-      font-weight: 400;
-      margin-bottom: 0.6rem;
-    }
-
-    .service-card p {
-      font-size: 0.85rem;
-      color: var(--muted);
-      line-height: 1.7;
-      font-weight: 300;
-    }
-
-    .service-price {
-      margin-top: 1.2rem;
-      font-size: 0.75rem;
-      letter-spacing: 0.15em;
-      color: var(--gold);
-      font-weight: 500;
-    }
-
-    /* Why us */
-    .why-section {
-      background: var(--deep);
-      color: var(--cream);
-      padding: 6rem 4rem;
-    }
-
-    .why-section .section-label { color: var(--blush); }
-    .why-section .section-title { color: var(--cream); }
-
-    .why-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-      gap: 3rem;
-      margin-top: 1rem;
-    }
-
-    .why-item { text-align: center; }
-
-    .why-num {
-      font-family: 'Cormorant Garamond', serif;
-      font-size: 3.5rem;
-      font-weight: 300;
-      color: var(--rose);
-      line-height: 1;
-      margin-bottom: 0.5rem;
-    }
-
-    .why-item h4 {
-      font-size: 0.8rem;
-      letter-spacing: 0.15em;
-      text-transform: uppercase;
-      margin-bottom: 0.5rem;
-    }
-
-    .why-item p {
-      font-size: 0.82rem;
-      color: var(--blush);
-      font-weight: 300;
-      line-height: 1.7;
-    }
-
-    /* Testimonials */
-    .testimonials { padding: 6rem 4rem; background: var(--soft); }
-
-    .testi-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-      gap: 2rem;
-      margin-top: 2rem;
-    }
-
-    .testi-card {
-      background: white;
-      padding: 2rem;
-      position: relative;
-    }
-
-    .testi-card::before {
-      content: '"';
-      font-family: 'Cormorant Garamond', serif;
-      font-size: 5rem;
-      color: var(--blush);
-      position: absolute;
-      top: -0.5rem; left: 1.5rem;
-      line-height: 1;
-    }
-
-    .testi-card p {
-      font-size: 0.9rem;
-      font-style: italic;
-      color: var(--muted);
-      line-height: 1.8;
-      margin-top: 1.5rem;
-      font-family: 'Cormorant Garamond', serif;
-      font-size: 1.05rem;
-      font-weight: 300;
-    }
-
-    .testi-name {
-      margin-top: 1.2rem;
-      font-size: 0.72rem;
-      letter-spacing: 0.2em;
-      text-transform: uppercase;
-      color: var(--rose);
-      font-style: normal;
-    }
-
-    .stars { color: var(--gold); font-size: 0.8rem; margin-top: 0.3rem; }
-
-    /* Contact strip */
-    .contact-strip {
-      padding: 4rem;
-      background: linear-gradient(135deg, var(--rose), #a06450);
-      color: white;
-      display: flex; align-items: center; justify-content: space-between;
-      flex-wrap: wrap; gap: 2rem;
-    }
-
-    .contact-strip h2 {
-      font-family: 'Cormorant Garamond', serif;
-      font-size: 2.2rem;
-      font-weight: 300;
-    }
-
-    .contact-strip p { font-size: 0.9rem; opacity: 0.85; margin-top: 0.4rem; }
-
-    .btn-white {
-      background: white;
-      color: var(--rose);
-      padding: 1rem 2.2rem;
-      font-size: 0.72rem;
-      letter-spacing: 0.2em;
-      text-transform: uppercase;
-      border: none;
-      cursor: pointer;
-      font-family: 'Jost', sans-serif;
-      transition: all 0.3s;
-      white-space: nowrap;
-    }
-
-    .btn-white:hover { background: var(--deep); color: white; transform: translateY(-2px); }
-
-    /* ── TERMS PAGE ── */
-    .legal-page {
-      max-width: 800px;
-      margin: 0 auto;
-      padding: 5rem 2rem;
-    }
-
-    .legal-page .page-header {
-      margin-bottom: 3rem;
-      border-bottom: 1px solid var(--blush);
-      padding-bottom: 2rem;
-    }
-
-    .legal-page h1 {
-      font-size: clamp(2rem, 4vw, 3rem);
-      margin-bottom: 0.5rem;
-    }
-
-    .legal-page .updated {
-      font-size: 0.75rem;
-      letter-spacing: 0.15em;
-      color: var(--muted);
-      text-transform: uppercase;
-    }
-
-    .legal-section { margin-bottom: 2.5rem; }
-
-    .legal-section h2 {
-      font-family: 'Cormorant Garamond', serif;
-      font-size: 1.4rem;
-      font-weight: 400;
-      color: var(--deep);
-      margin-bottom: 0.8rem;
-      display: flex; align-items: center; gap: 0.7rem;
-    }
-
-    .legal-section h2::before {
-      content: '';
-      display: inline-block;
-      width: 20px; height: 2px;
-      background: var(--rose);
-    }
-
-    .legal-section p, .legal-section li {
-      font-size: 0.9rem;
-      color: var(--muted);
-      line-height: 1.85;
-      font-weight: 300;
-    }
-
-    .legal-section ul {
-      padding-left: 1.5rem;
-      margin-top: 0.6rem;
-    }
-
-    .legal-section li { margin-bottom: 0.4rem; }
-
-    .highlight-box {
-      background: var(--soft);
-      border-left: 3px solid var(--rose);
-      padding: 1.2rem 1.5rem;
-      margin: 1rem 0;
-      border-radius: 0 4px 4px 0;
-    }
-
-    .highlight-box p {
-      font-size: 0.88rem;
-      color: var(--deep);
-    }
-
-    /* ── FOOTER ── */
-    footer {
-      background: var(--deep);
-      color: var(--cream);
-      padding: 4rem;
-    }
-
-    .footer-grid {
-      display: grid;
-      grid-template-columns: 2fr 1fr 1fr;
-      gap: 3rem;
-      margin-bottom: 3rem;
-    }
-
-    .footer-brand .logo { color: var(--cream); display: block; margin-bottom: 1rem; }
-
-    .footer-brand p {
-      font-size: 0.85rem;
-      color: var(--blush);
-      font-weight: 300;
-      line-height: 1.7;
-      max-width: 280px;
-    }
-
-    footer h4 {
-      font-size: 0.7rem;
-      letter-spacing: 0.25em;
-      text-transform: uppercase;
-      color: var(--gold);
-      margin-bottom: 1.2rem;
-    }
-
-    footer ul { list-style: none; }
-    footer ul li { margin-bottom: 0.6rem; }
-
-    footer ul a {
-      font-size: 0.85rem;
-      color: var(--blush);
-      text-decoration: none;
-      font-weight: 300;
-      cursor: pointer;
-      transition: color 0.2s;
-    }
-
-    footer ul a:hover { color: var(--rose); }
-
-    .footer-bottom {
-      border-top: 1px solid rgba(255,255,255,0.1);
-      padding-top: 1.5rem;
-      display: flex; justify-content: space-between; align-items: center;
-      flex-wrap: wrap; gap: 1rem;
-    }
-
-    .footer-bottom p {
-      font-size: 0.75rem;
-      color: var(--muted);
-      letter-spacing: 0.05em;
-    }
-
-    /* ── BOOKING MODAL ── */
-    .modal-overlay {
-      display: none;
-      position: fixed; inset: 0; z-index: 200;
-      background: rgba(44,26,20,0.7);
-      backdrop-filter: blur(6px);
-      align-items: center; justify-content: center;
-    }
-
-    .modal-overlay.open { display: flex; }
-
-    .modal {
-      background: var(--cream);
-      padding: 3rem;
-      max-width: 480px;
-      width: 90%;
-      animation: modalIn 0.35s ease both;
-    }
-
-    @keyframes modalIn {
-      from { opacity: 0; transform: scale(0.95) translateY(20px); }
-      to { opacity: 1; transform: scale(1) translateY(0); }
-    }
-
-    .modal h2 {
-      font-family: 'Cormorant Garamond', serif;
-      font-size: 2rem;
-      font-weight: 300;
-      margin-bottom: 0.4rem;
-    }
-
-    .modal p { font-size: 0.85rem; color: var(--muted); margin-bottom: 1.5rem; }
-
-    .form-group { margin-bottom: 1.2rem; }
-    .form-group label { display: block; font-size: 0.7rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--muted); margin-bottom: 0.4rem; }
-    .form-group input, .form-group select {
-      width: 100%;
-      padding: 0.8rem 1rem;
-      border: 1px solid var(--blush);
-      background: white;
-      font-family: 'Jost', sans-serif;
-      font-size: 0.9rem;
-      color: var(--deep);
-      outline: none;
-      transition: border-color 0.2s;
-    }
-    .form-group input:focus, .form-group select:focus { border-color: var(--rose); }
-
-    .modal-actions { display: flex; gap: 1rem; margin-top: 1.5rem; }
-    .modal-close {
-      background: none; border: 1px solid var(--blush); color: var(--muted);
-      padding: 0.8rem 1.5rem; cursor: pointer; font-family: 'Jost', sans-serif;
-      font-size: 0.8rem; letter-spacing: 0.1em; transition: all 0.2s;
-    }
-    .modal-close:hover { border-color: var(--rose); color: var(--rose); }
-
-    @media (max-width: 768px) {
-      nav { padding: 1.2rem 1.5rem; }
-      .nav-links { gap: 1.2rem; }
-      .nav-links a { font-size: 0.68rem; }
-      .section, .testimonials, .why-section { padding: 4rem 1.5rem; }
-      .hero-content { padding: 0 1.5rem; }
-      .contact-strip { padding: 2.5rem 1.5rem; text-align: center; justify-content: center; }
-      .footer-grid { grid-template-columns: 1fr; gap: 2rem; }
-      footer { padding: 3rem 1.5rem; }
-      .legal-page { padding: 3rem 1.5rem; }
-    }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kasun Dilshan Welathantrige</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300&family=Geist+Mono:wght@300;400&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --white: #f8f6f2;
+  --black: #0e0e0d;
+  --ink: #1a1a18;
+  --gray: #8a8880;
+  --line: #e2e0db;
+}
+
+html { scroll-behavior: smooth; }
+
+body {
+  background: var(--white);
+  color: var(--ink);
+  font-family: 'Geist Mono', monospace;
+  font-weight: 300;
+  overflow-x: hidden;
+}
+
+nav {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1.6rem 4rem;
+  background: var(--white);
+  border-bottom: 1px solid var(--line);
+}
+
+.nav-logo {
+  font-family: 'Cormorant Garamond', serif;
+  font-weight: 300;
+  font-size: 1.05rem;
+  letter-spacing: 0.04em;
+}
+
+.nav-links { display: flex; gap: 2.5rem; }
+.nav-links a {
+  text-decoration: none;
+  font-size: 0.67rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--gray);
+  transition: color 0.2s;
+}
+.nav-links a:hover { color: var(--ink); }
+
+#hero {
+  min-height: 100vh;
+  display: grid;
+  grid-template-rows: 1fr auto;
+  padding: 0 4rem;
+  padding-top: 7rem;
+}
+
+.hero-content {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  max-width: 780px;
+}
+
+.hero-eyebrow {
+  font-size: 0.67rem;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--gray);
+  margin-bottom: 3rem;
+  opacity: 0;
+  animation: appear 1s 0.3s forwards;
+}
+
+.hero-name {
+  font-family: 'Cormorant Garamond', serif;
+  font-weight: 300;
+  font-size: clamp(4.5rem, 10vw, 9.5rem);
+  line-height: 0.92;
+  letter-spacing: -0.02em;
+  margin-bottom: 2.5rem;
+  opacity: 0;
+  animation: appear 1s 0.5s forwards;
+}
+.hero-name em { font-style: italic; color: var(--gray); }
+
+.hero-bio {
+  max-width: 480px;
+  font-size: 0.82rem;
+  line-height: 2;
+  color: var(--gray);
+  margin-bottom: 3.5rem;
+  opacity: 0;
+  animation: appear 1s 0.7s forwards;
+}
+
+.hero-cta {
+  display: flex;
+  gap: 2rem;
+  align-items: center;
+  opacity: 0;
+  animation: appear 1s 0.9s forwards;
+}
+
+.link-arrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  font-size: 0.7rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  text-decoration: none;
+  color: var(--ink);
+  border-bottom: 1px solid var(--ink);
+  padding-bottom: 0.15rem;
+  transition: gap 0.25s;
+}
+.link-arrow:hover { gap: 1rem; }
+.link-arrow.muted { color: var(--gray); border-color: var(--line); }
+.link-arrow.muted:hover { color: var(--ink); border-color: var(--ink); }
+
+.hero-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  padding: 2rem 0;
+  border-top: 1px solid var(--line);
+  opacity: 0;
+  animation: appear 1s 1.1s forwards;
+}
+
+.hero-footer-tag {
+  font-size: 0.67rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--gray);
+}
+
+.scroll-hint {
+  font-size: 0.67rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--gray);
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+.scroll-hint::before {
+  content: '';
+  display: block;
+  width: 1px; height: 24px;
+  background: var(--gray);
+  animation: scrollLine 2s ease-in-out infinite;
+}
+@keyframes scrollLine {
+  0%, 100% { transform: scaleY(1); opacity: 0.5; }
+  50% { transform: scaleY(0.4); opacity: 1; }
+}
+
+section.content {
+  padding: 7rem 4rem;
+  border-top: 1px solid var(--line);
+}
+
+.section-meta {
+  display: flex;
+  align-items: baseline;
+  gap: 1.5rem;
+  margin-bottom: 5rem;
+}
+
+.section-num {
+  font-size: 0.65rem;
+  letter-spacing: 0.2em;
+  color: var(--gray);
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.section-heading {
+  font-family: 'Cormorant Garamond', serif;
+  font-weight: 300;
+  font-size: clamp(2.2rem, 4vw, 3.8rem);
+  line-height: 1.1;
+  letter-spacing: -0.01em;
+}
+.section-heading em { font-style: italic; color: var(--gray); }
+
+/* ABOUT */
+.about-grid {
+  display: grid;
+  grid-template-columns: 1fr 2fr;
+  gap: 6rem;
+  align-items: start;
+}
+
+.about-sidebar {
+  position: sticky;
+  top: 8rem;
+}
+
+.about-label {
+  font-size: 0.67rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--gray);
+  margin-bottom: 2rem;
+  padding-bottom: 2rem;
+  border-bottom: 1px solid var(--line);
+}
+
+.credential {
+  padding: 1.4rem 0;
+  border-bottom: 1px solid var(--line);
+}
+.credential-title {
+  font-size: 0.67rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--gray);
+  margin-bottom: 0.4rem;
+}
+.credential-value {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.1rem;
+  line-height: 1.4;
+}
+
+.about-body p {
+  font-size: 0.88rem;
+  line-height: 2.2;
+  color: var(--gray);
+  margin-bottom: 2rem;
+  max-width: 600px;
+}
+.about-body p strong { color: var(--ink); font-weight: 400; }
+
+/* EXPERTISE */
+#expertise { background: var(--ink); color: var(--white); }
+#expertise .section-heading { color: var(--white); }
+#expertise .section-num { color: rgba(248,246,242,0.3); }
+
+.exp-row {
+  display: grid;
+  grid-template-columns: 3rem 1fr auto;
+  align-items: baseline;
+  gap: 2rem;
+  padding: 2rem 0;
+  border-bottom: 1px solid rgba(248,246,242,0.08);
+  transition: all 0.25s;
+}
+.exp-row:first-child { border-top: 1px solid rgba(248,246,242,0.08); }
+.exp-row:hover .exp-title { letter-spacing: 0.03em; }
+
+.exp-idx {
+  font-size: 0.65rem;
+  color: rgba(248,246,242,0.25);
+  letter-spacing: 0.1em;
+}
+
+.exp-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-weight: 300;
+  font-size: 1.6rem;
+  color: var(--white);
+  transition: letter-spacing 0.3s;
+}
+
+.exp-tags { display: flex; gap: 0.6rem; flex-wrap: wrap; justify-content: flex-end; }
+.exp-tag {
+  font-size: 0.6rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: rgba(248,246,242,0.35);
+  border: 1px solid rgba(248,246,242,0.12);
+  padding: 0.25rem 0.7rem;
+}
+
+/* SKILLS */
+.skills-cols {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0 6rem;
+}
+
+.skill-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.3rem 0;
+  border-bottom: 1px solid var(--line);
+}
+
+.skill-name {
+  font-size: 0.72rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.skill-bar-wrap { display: flex; align-items: center; gap: 1rem; }
+
+.skill-dots { display: flex; gap: 4px; }
+.dot {
+  width: 5px; height: 5px;
+  border-radius: 50%;
+  background: var(--line);
+  transition: background 0.4s;
+}
+.dot.filled { background: var(--ink); }
+
+.skill-pct {
+  font-size: 0.62rem;
+  letter-spacing: 0.1em;
+  color: var(--gray);
+  width: 2.4rem;
+  text-align: right;
+}
+
+/* CONTACT */
+.contact-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 6rem;
+  align-items: start;
+}
+
+.contact-sub {
+  font-size: 0.82rem;
+  line-height: 2;
+  color: var(--gray);
+  margin-bottom: 2.5rem;
+  max-width: 380px;
+}
+
+.contact-item {
+  padding: 1.6rem 0;
+  border-bottom: 1px solid var(--line);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.contact-item:first-of-type { border-top: 1px solid var(--line); }
+
+.contact-item-label {
+  font-size: 0.65rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--gray);
+}
+
+.contact-item a {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.1rem;
+  text-decoration: none;
+  color: var(--ink);
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  transition: gap 0.25s;
+}
+.contact-item a:hover { gap: 1rem; }
+
+footer {
+  padding: 2rem 4rem;
+  border-top: 1px solid var(--line);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.footer-copy {
+  font-size: 0.65rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--gray);
+}
+
+.reveal {
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.9s cubic-bezier(0.16,1,0.3,1), transform 0.9s cubic-bezier(0.16,1,0.3,1);
+}
+.reveal.visible { opacity: 1; transform: none; }
+
+@keyframes appear { to { opacity: 1; } }
+
+@media (max-width: 768px) {
+  nav { padding: 1.2rem 1.5rem; }
+  .nav-links { display: none; }
+  #hero, section.content { padding-left: 1.5rem; padding-right: 1.5rem; }
+  .hero-name { font-size: clamp(3.5rem, 15vw, 6rem); }
+  .about-grid, .skills-cols, .contact-grid { grid-template-columns: 1fr; gap: 3rem; }
+  .about-sidebar { position: static; }
+  .exp-row { grid-template-columns: 2rem 1fr; }
+  .exp-tags { display: none; }
+  footer { flex-direction: column; gap: 0.5rem; text-align: center; }
+}
+</style>
 </head>
 <body>
 
-<!-- NAV -->
 <nav>
-  <a class="logo" href="#"><span>N</span>ew Favourite Salon</a>
-  <ul class="nav-links">
-    <li><a onclick="showPage('home')" class="active" id="nav-home">Home</a></li>
-    <li><a onclick="showPage('terms')" id="nav-terms">Terms & Conditions</a></li>
-    <li><a onclick="showPage('policies')" id="nav-policies">Policies</a></li>
-    <li><a onclick="openModal()" style="color:var(--rose)">Book Now</a></li>
-  </ul>
+  <div class="nav-logo">Kasun Dilshan</div>
+  <div class="nav-links">
+    <a href="#about">About</a>
+    <a href="#expertise">Expertise</a>
+    <a href="#skills">Skills</a>
+    <a href="#contact">Contact</a>
+  </div>
 </nav>
 
-<!-- ══════════════ HOME PAGE ══════════════ -->
-<div class="page active" id="page-home">
-
-  <!-- Hero -->
-  <section class="hero">
-    <div class="hero-bg"></div>
-    <div class="hero-deco"></div>
-    <div class="hero-circle"></div>
-    <div class="hero-content">
-      <p class="hero-tag">Established 2022 · Galigamuwa, Sri Lanka</p>
-      <h1>Where <em>Beauty</em><br>Finds Its Home</h1>
-      <p class="hero-sub">Experience luxury hair, skin & nail care delivered by expert stylists in an atmosphere designed for total relaxation.</p>
-      <a class="btn" onclick="openModal()">Book an Appointment →</a>
-      <a class="btn btn-outline" onclick="document.getElementById('services-section').scrollIntoView({behavior:'smooth'})">Our Services</a>
+<section id="hero">
+  <div class="hero-content">
+    <p class="hero-eyebrow">Founder &amp; CEO — DOT AI LABS</p>
+    <h1 class="hero-name">Kasun<br><em>Dilshan</em></h1>
+    <p class="hero-bio">AI Developer &amp; Software Engineer building intelligent systems that solve real-world problems. Based in Sri Lanka.</p>
+    <div class="hero-cta">
+      <a href="#contact" class="link-arrow">Get in touch →</a>
+      <a href="#expertise" class="link-arrow muted">View work →</a>
     </div>
-  </section>
+  </div>
+  <div class="hero-footer">
+    <span class="hero-footer-tag">MSc Computer Science · University of Colombo</span>
+    <span class="scroll-hint">Scroll</span>
+  </div>
+</section>
 
-  <!-- Services -->
-  <section class="section" id="services-section">
-    <p class="section-label">What We Offer</p>
-    <h2 class="section-title">Our <em>Signature</em> Services</h2>
-    <div class="services-grid">
-      <div class="service-card">
-        <div class="service-icon">✂️</div>
-        <h3>Hair Styling</h3>
-        <p>Cut, colour, blowout and treatment services personalised for your unique hair type and lifestyle.</p>
-        <!--p class="service-price">FROM RS. 1,500</p-->
+<section class="content" id="about">
+  <div class="section-meta reveal">
+    <span class="section-num">01</span>
+    <h2 class="section-heading">About <em>me</em></h2>
+  </div>
+  <div class="about-grid reveal">
+    <div class="about-sidebar">
+      <div class="about-label">Profile</div>
+      <div class="credential">
+        <div class="credential-title">Company</div>
+        <div class="credential-value">DOT AI LABS</div>
       </div>
-      <div class="service-card">
-        <div class="service-icon">💆</div>
-        <h3>Skin & Facial</h3>
-        <p>Deep-cleanse facials, brightening treatments, and bespoke skin rituals for a luminous complexion.</p>
-        <!--p class="service-price">FROM RS. 2,500</p-->
+      <div class="credential">
+        <div class="credential-title">Role</div>
+        <div class="credential-value">Founder &amp; CEO</div>
       </div>
-      <div class="service-card">
-        <div class="service-icon">💅</div>
-        <h3>Nail Art & Care</h3>
-        <p>Classic manicures, gel extensions, and intricate nail art by our certified nail technicians.</p>
-        <!--p class="service-price">FROM RS. 800</p-->
+      <div class="credential">
+        <div class="credential-title">Masters</div>
+        <div class="credential-value">University of Colombo</div>
       </div>
-      <div class="service-card">
-        <div class="service-icon">🌿</div>
-        <h3>Spa & Wellness</h3>
-        <p>Full-body massages, aromatherapy, and detox wraps to restore your body and calm your mind.</p>
-        <!--p class="service-price">FROM RS. 3,500</p-->
-      </div>
-      <div class="service-card">
-        <div class="service-icon">👰</div>
-        <h3>Bridal Package</h3>
-        <p>Complete bridal beauty packages including trial sessions, morning-of services and full bridal party preparation.</p>
-        <!--p class="service-price">FROM RS. 25,000</p-->
-      </div>
-      <div class="service-card">
-        <div class="service-icon">🌸</div>
-        <h3>Waxing & Threading</h3>
-        <p>Gentle and effective hair removal using premium waxes and threading techniques for smooth, lasting results.</p>
-        <!--p class="service-price">FROM RS. 500</p-->
+      <div class="credential">
+        <div class="credential-title">Degree</div>
+        <div class="credential-value">University of Ruhuna</div>
       </div>
     </div>
-  </section>
-
-  <!-- Why Us -->
-  <section class="why-section">
-    <p class="section-label">Why Choose Us</p>
-    <h2 class="section-title">The <em>New Favourite Salon</em> Difference</h2>
-    <div class="why-grid">
-      <div class="why-item">
-        <div class="why-num">14+</div>
-        <h4>Years of Excellence</h4>
-        <p>Serving clients across Colombo with unmatched expertise since 2010.</p>
-      </div>
-      <div class="why-item">
-        <div class="why-num">5K+</div>
-        <h4>Happy Clients</h4>
-        <p>A loyal community built on trust, results and personalised care.</p>
-      </div>
-      <div class="why-item">
-        <div class="why-num">20+</div>
-        <h4>Expert Stylists</h4>
-        <p>Internationally trained professionals dedicated to your best look.</p>
-      </div>
-      <div class="why-item">
-        <div class="why-num">100%</div>
-        <h4>Premium Products</h4>
-        <p>We use only certified, skin-safe, cruelty-free beauty brands.</p>
-      </div>
+    <div class="about-body">
+      <p>I am an AI Developer and Software Engineer passionate about building <strong>intelligent systems that solve real-world problems</strong>. My academic foundation spans a degree from the University of Ruhuna and a Master's in Computer Science at the University of Colombo.</p>
+      <p>Through <strong>DOT AI LABS</strong>, the company I founded and lead as CEO, I specialize in developing AI-powered applications, machine learning models, automation systems, and intelligent software solutions that help businesses grow and operate smarter.</p>
+      <p>My work sits at the intersection of artificial intelligence, automation, and practical software engineering — continuously pushing the boundary of what machines can do for people.</p>
+      <a href="https://www.linkedin.com/in/dilkasun071/" target="_blank" class="link-arrow" style="margin-top:1rem">LinkedIn ↗</a>
     </div>
-  </section>
+  </div>
+</section>
 
-  <!-- Testimonials -->
-  <section class="testimonials">
-    <p class="section-label">Client Love</p>
-    <h2 class="section-title">What Our Guests <em>Say</em></h2>
-    <div class="testi-grid">
-      <div class="testi-card">
-        <p>The best salon experience I've ever had. My hair has never looked this healthy and beautiful. The team truly listens to what you want.</p>
-        <p class="testi-name">— Dilani Perera</p>
-        <div class="stars">★★★★★</div>
-      </div>
-      <div class="testi-card">
-        <p>I came in for my bridal package and they made me feel like a queen. Every detail was perfect. I will be back for every occasion!</p>
-        <p class="testi-name">— Shalini Fernando</p>
-        <div class="stars">★★★★★</div>
-      </div>
-      <div class="testi-card">
-        <p>Absolutely stunning nail art and the spa massage was heavenly. The ambience is so calm and luxurious. My favourite salon in Colombo.</p>
-        <p class="testi-name">— Nadeesha Jayawardena</p>
-        <div class="stars">★★★★★</div>
-      </div>
+<section class="content" id="expertise">
+  <div class="section-meta reveal">
+    <span class="section-num">02</span>
+    <h2 class="section-heading">What I <em>build</em></h2>
+  </div>
+  <div class="reveal">
+    <div class="exp-row">
+      <span class="exp-idx">01</span>
+      <span class="exp-title">AI-Powered Applications</span>
+      <div class="exp-tags"><span class="exp-tag">LLMs</span><span class="exp-tag">NLP</span><span class="exp-tag">Vision</span></div>
     </div>
-  </section>
+    <div class="exp-row">
+      <span class="exp-idx">02</span>
+      <span class="exp-title">Machine Learning Models</span>
+      <div class="exp-tags"><span class="exp-tag">PyTorch</span><span class="exp-tag">Scikit</span><span class="exp-tag">TF</span></div>
+    </div>
+    <div class="exp-row">
+      <span class="exp-idx">03</span>
+      <span class="exp-title">Automation Systems</span>
+      <div class="exp-tags"><span class="exp-tag">n8n</span><span class="exp-tag">Workflows</span><span class="exp-tag">APIs</span></div>
+    </div>
+    <div class="exp-row">
+      <span class="exp-idx">04</span>
+      <span class="exp-title">Intelligent Software</span>
+      <div class="exp-tags"><span class="exp-tag">FastAPI</span><span class="exp-tag">React</span><span class="exp-tag">Cloud</span></div>
+    </div>
+  </div>
+</section>
 
-  <!-- Contact Strip -->
-  <div class="contact-strip">
+<section class="content" id="skills">
+  <div class="section-meta reveal">
+    <span class="section-num">03</span>
+    <h2 class="section-heading">Core <em>skills</em></h2>
+  </div>
+  <div class="skills-cols reveal" id="skillGrid">
     <div>
-      <h2>Ready to Look Your Best?</h2>
-      <p>📍 123 Galle Road, Colombo 3 &nbsp;|&nbsp; 📞 +94 11 234 5678 &nbsp;|&nbsp; ⏰ Mon–Sat 9am–7pm</p>
+      <div class="skill-row">
+        <span class="skill-name">Python / ML</span>
+        <div class="skill-bar-wrap">
+          <div class="skill-dots" data-fill="9">
+            <div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div>
+          </div>
+          <span class="skill-pct">95%</span>
+        </div>
+      </div>
+      <div class="skill-row">
+        <span class="skill-name">AI / LLM</span>
+        <div class="skill-bar-wrap">
+          <div class="skill-dots" data-fill="9">
+            <div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div>
+          </div>
+          <span class="skill-pct">90%</span>
+        </div>
+      </div>
+      <div class="skill-row">
+        <span class="skill-name">Automation</span>
+        <div class="skill-bar-wrap">
+          <div class="skill-dots" data-fill="9">
+            <div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div>
+          </div>
+          <span class="skill-pct">92%</span>
+        </div>
+      </div>
+      <div class="skill-row">
+        <span class="skill-name">Deep Learning</span>
+        <div class="skill-bar-wrap">
+          <div class="skill-dots" data-fill="8">
+            <div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div>
+          </div>
+          <span class="skill-pct">82%</span>
+        </div>
+      </div>
     </div>
-    <button class="btn-white" onclick="openModal()">Book Now →</button>
-  </div>
-
-</div><!-- /home -->
-
-
-<!-- ══════════════ TERMS PAGE ══════════════ -->
-<div class="page" id="page-terms">
-  <div class="legal-page">
-    <div class="page-header">
-      <p class="section-label">Legal</p>
-      <h1 class="section-title">Terms & <em>Conditions</em></h1>
-      <p class="updated">Last updated: February 2026</p>
-    </div>
-
-    <div class="highlight-box">
-      <p>Please read these Terms and Conditions carefully before using our services. By booking an appointment or visiting New Favourite Salon, you agree to be bound by these terms.</p>
-    </div>
-
-    <div class="legal-section">
-      <h2>1. Acceptance of Terms</h2>
-      <p>By accessing our premises or booking any service through our website, phone, or in person, you confirm that you have read, understood, and agree to these Terms and Conditions. These terms apply to all clients, visitors, and users of New Favourite Salon's services.</p>
-    </div>
-
-    <div class="legal-section">
-      <h2>2. Services</h2>
-      <p>New Favourite Salon offers professional beauty and wellness services including hair styling, skincare, nail care, waxing, and spa treatments. We reserve the right to:</p>
-      <ul>
-        <li>Modify or discontinue any service without prior notice</li>
-        <li>Refuse service to anyone who poses a health or safety risk</li>
-        <li>Adjust pricing at any time — current prices are available in-salon</li>
-        <li>Recommend alternative treatments if the requested service is unsuitable for your hair or skin condition</li>
-      </ul>
-    </div>
-
-    <div class="legal-section">
-      <h2>3. Appointments & Bookings</h2>
-      <p>Appointments can be made in person, by phone, or via our website. To secure your booking:</p>
-      <ul>
-        <li>A valid name and contact number are required for all appointments</li>
-        <li>Bridal and group bookings may require a non-refundable deposit</li>
-        <li>We recommend arriving 10 minutes before your scheduled time</li>
-        <li>Late arrivals may result in a shortened service or rescheduling</li>
-      </ul>
-    </div>
-
-    <div class="legal-section">
-      <h2>4. Cancellations & No-Shows</h2>
-      <p>We kindly request at least 24 hours' notice for all cancellations or rescheduling requests. Failure to provide adequate notice may result in:</p>
-      <ul>
-        <li>Loss of any deposit paid</li>
-        <li>A cancellation fee of up to 50% of the service value</li>
-        <li>Restriction of future booking privileges for repeated no-shows</li>
-      </ul>
-    </div>
-
-    <div class="legal-section">
-      <h2>5. Health & Safety</h2>
-      <p>Client safety is our highest priority. You agree to:</p>
-      <ul>
-        <li>Disclose any known allergies, skin conditions, or medical circumstances before your service</li>
-        <li>Inform your stylist if you are pregnant or have recently undergone medical procedures</li>
-        <li>Understand that patch tests may be required before chemical treatments</li>
-        <li>Accept that New Favourite Salon is not liable for reactions arising from undisclosed conditions</li>
-      </ul>
-    </div>
-
-    <div class="legal-section">
-      <h2>6. Payment</h2>
-      <p>Payment is due at the time of service. We accept cash, debit cards, and major credit cards. Prices displayed are in Sri Lankan Rupees (LKR) and are inclusive of applicable taxes.</p>
-    </div>
-
-    <div class="legal-section">
-      <h2>7. Complaints & Satisfaction</h2>
-      <p>If you are unhappy with any service, please inform a staff member before leaving the salon. We will make every reasonable effort to address your concern. Complaints raised after leaving the premises may be subject to management review and may not qualify for complimentary redo services.</p>
-    </div>
-
-    <div class="legal-section">
-      <h2>8. Limitation of Liability</h2>
-      <p>To the fullest extent permitted by law, New Favourite Salon shall not be liable for any indirect, incidental, or consequential damages arising from the use of our services, including but not limited to allergic reactions from undisclosed conditions, loss of personal property, or dissatisfaction with results due to client-provided inaccurate information.</p>
-    </div>
-
-    <div class="legal-section">
-      <h2>9. Governing Law</h2>
-      <p>These Terms and Conditions are governed by and construed in accordance with the laws of Sri Lanka. Any disputes shall be subject to the exclusive jurisdiction of the courts of Colombo.</p>
-    </div>
-
-    <div class="legal-section">
-      <h2>10. Contact</h2>
-      <p>For questions about these Terms, contact us at: <strong>legal@newfavouritesalon.lk</strong> or call <strong>+94 70 777 1 999</strong>.</p>
+    <div>
+      <div class="skill-row">
+        <span class="skill-name">FastAPI / Node</span>
+        <div class="skill-bar-wrap">
+          <div class="skill-dots" data-fill="9">
+            <div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div>
+          </div>
+          <span class="skill-pct">88%</span>
+        </div>
+      </div>
+      <div class="skill-row">
+        <span class="skill-name">React / Frontend</span>
+        <div class="skill-bar-wrap">
+          <div class="skill-dots" data-fill="8">
+            <div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div>
+          </div>
+          <span class="skill-pct">85%</span>
+        </div>
+      </div>
+      <div class="skill-row">
+        <span class="skill-name">API Integration</span>
+        <div class="skill-bar-wrap">
+          <div class="skill-dots" data-fill="9">
+            <div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div>
+          </div>
+          <span class="skill-pct">93%</span>
+        </div>
+      </div>
+      <div class="skill-row">
+        <span class="skill-name">Cloud / DevOps</span>
+        <div class="skill-bar-wrap">
+          <div class="skill-dots" data-fill="8">
+            <div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div>
+          </div>
+          <span class="skill-pct">80%</span>
+        </div>
+      </div>
     </div>
   </div>
-</div><!-- /terms -->
+</section>
 
-
-<!-- ══════════════ POLICIES PAGE ══════════════ -->
-<div class="page" id="page-policies">
-  <div class="legal-page">
-    <div class="page-header">
-      <p class="section-label">Our Commitment</p>
-      <h1 class="section-title">Salon <em>Policies</em></h1>
-      <p class="updated">Last updated: February 2026</p>
+<section class="content" id="contact">
+  <div class="section-meta reveal">
+    <span class="section-num">04</span>
+    <h2 class="section-heading">Get in <em>touch</em></h2>
+  </div>
+  <div class="contact-grid reveal">
+    <div>
+      <p class="contact-sub">Have a project in mind? Whether it's an AI system, automation workflow, or a full software build — I'd love to hear about it.</p>
+      <a href="https://www.linkedin.com/in/dilkasun071/" target="_blank" class="link-arrow">Connect on LinkedIn →</a>
     </div>
-
-    <div class="highlight-box">
-      <p>Our policies are designed to ensure a safe, welcoming, and exceptional experience for every guest. We appreciate your understanding and cooperation.</p>
-    </div>
-
-    <div class="legal-section">
-      <h2>Booking Policy</h2>
-      <p>We highly recommend booking in advance to secure your preferred time slot, especially for weekends and bridal appointments. Walk-ins are welcome but subject to availability. Online and phone bookings are confirmed via SMS or WhatsApp.</p>
-    </div>
-
-    <div class="legal-section">
-      <h2>Cancellation Policy</h2>
-      <p>We understand plans change. We request:</p>
-      <ul>
-        <li><strong>24 hours notice</strong> for individual service cancellations</li>
-        <li><strong>48 hours notice</strong> for group bookings (3+ clients)</li>
-        <li><strong>72 hours notice</strong> for bridal packages</li>
-      </ul>
-      <p style="margin-top:0.8rem;">Repeated late cancellations may result in prepayment being required for future bookings.</p>
-    </div>
-
-    <div class="legal-section">
-      <h2>Children Policy</h2>
-      <p>Children under 12 are welcome for age-appropriate services (haircuts, nail painting). For safety reasons, children who are not receiving services should not be left unattended in the salon. We appreciate your understanding in ensuring a peaceful environment for all guests.</p>
-    </div>
-
-    <div class="legal-section">
-      <h2>Colour & Chemical Service Policy</h2>
-      <p>For certain chemical services (permanent colour, relaxers, keratin treatments), a patch test performed 48 hours prior to the appointment is mandatory for new clients or those who have not received such services in the past 12 months. We reserve the right to decline services where a client's hair condition may be at risk of damage.</p>
-    </div>
-
-    <div class="legal-section">
-      <h2>Satisfaction Guarantee</h2>
-      <p>We are committed to your satisfaction. If you are not completely happy with your service, please let us know <strong>before leaving the salon</strong>. We will do our best to address your concerns at no additional charge. Redo requests made within 7 days of the service will be considered at management's discretion.</p>
-    </div>
-
-    <div class="legal-section">
-      <h2>Personal Belongings</h2>
-      <p>New Favourite Salon is not responsible for any lost or stolen personal items. Please keep your valuables secure. We recommend leaving jewellery at home prior to services such as facials or spa treatments.</p>
-    </div>
-
-    <div class="legal-section">
-      <h2>Privacy Policy</h2>
-      <p>We collect and store your personal information (name, contact details, service history) solely for the purpose of providing our services and communicating appointment reminders. We do not sell or share your data with third parties. You may request deletion of your information at any time by contacting us.</p>
-    </div>
-
-    <div class="legal-section">
-      <h2>Photography Policy</h2>
-      <p>We love sharing client transformations! With your permission, we may photograph your results for use on our social media and promotional materials. You will always be asked for consent before any photo is taken or published. You have the right to decline at any time.</p>
-    </div>
-
-    <div class="legal-section">
-      <h2>Code of Conduct</h2>
-      <p>New Favourite Salon is a respectful, inclusive space. We do not tolerate any form of harassment, discrimination, or aggressive behaviour toward our staff or other clients. We reserve the right to refuse or terminate service for anyone who violates this policy.</p>
-    </div>
-
-    <div class="legal-section">
-      <h2>Contact Us</h2>
-      <p>Have questions about our policies? We'd love to hear from you.</p>
-      <ul>
-        <li>📍 Awissawella Road, Galigamuwa Town</li>
-        <li>📞 +94 70 777 1 999</li>
-        <li>📧 hello@newfavouritesalon.lk</li>
-        <li>⏰ Monday – Sunday: 9:00 AM – 10:00 PM</li>
-      </ul>
+    <div>
+      <div class="contact-item">
+        <span class="contact-item-label">LinkedIn</span>
+        <a href="https://www.linkedin.com/in/dilkasun071/" target="_blank">dilkasun071 →</a>
+      </div>
+      <div class="contact-item">
+        <span class="contact-item-label">Company</span>
+        <a href="#">DOT AI LABS →</a>
+      </div>
+      <div class="contact-item">
+        <span class="contact-item-label">Location</span>
+        <a href="#">Sri Lanka →</a>
+      </div>
     </div>
   </div>
-</div><!-- /policies -->
+</section>
 
-
-<!-- ══════════════ FOOTER ══════════════ -->
 <footer>
-  <div class="footer-grid">
-    <div class="footer-brand">
-      <a class="logo"><span style="color:var(--rose)">N</span>ouveau Salon</a>
-      <p>A sanctuary of beauty and self-care in the heart of Colombo. Serving Sri Lanka's most discerning clients since 2010.</p>
-    </div>
-    <div>
-      <h4>Navigate</h4>
-      <ul>
-        <li><a onclick="showPage('home')">Home</a></li>
-        <li><a onclick="showPage('terms')">Terms & Conditions</a></li>
-        <li><a onclick="showPage('policies')">Policies</a></li>
-        <li><a onclick="openModal()">Book Appointment</a></li>
-      </ul>
-    </div>
-    <div>
-      <h4>Services</h4>
-      <ul>
-        <li><a>Hair Styling</a></li>
-        <li><a>Skin & Facial</a></li>
-        <li><a>Nail Art & Care</a></li>
-        <li><a>Spa & Wellness</a></li>
-        <li><a>Bridal Packages</a></li>
-      </ul>
-    </div>
-  </div>
-  <div class="footer-bottom">
-    <p>© 2026 New Favourite Salon. All rights reserved.</p>
-    <p>Made with ♥ in Colombo, Sri Lanka</p>
-  </div>
+  <span class="footer-copy">© 2026 Kasun Dilshan</span>
+  <span class="footer-copy">DOT AI LABS</span>
 </footer>
 
-
-<!-- BOOKING MODAL -->
-<div class="modal-overlay" id="modalOverlay" onclick="closeModalOutside(event)">
-  <div class="modal">
-    <h2>Book an <em style="font-style:italic;color:var(--rose)">Appointment</em></h2>
-    <p>Fill in your details and we'll confirm your booking within 2 hours.</p>
-    <div class="form-group">
-      <label>Full Name</label>
-      <input type="text" placeholder="e.g. Dilani Perera"/>
-    </div>
-    <div class="form-group">
-      <label>Phone Number</label>
-      <input type="tel" placeholder="+94 77 000 0000"/>
-    </div>
-    <div class="form-group">
-      <label>Service</label>
-      <select>
-        <option value="">Select a service...</option>
-        <option>Hair Styling</option>
-        <option>Skin & Facial</option>
-        <option>Nail Art & Care</option>
-        <option>Spa & Wellness</option>
-        <option>Bridal Package</option>
-        <option>Waxing & Threading</option>
-      </select>
-    </div>
-    <div class="form-group">
-      <label>Preferred Date</label>
-      <input type="date"/>
-    </div>
-    <div class="modal-actions">
-      <button class="btn" onclick="submitBooking()">Confirm Booking →</button>
-      <button class="modal-close" onclick="closeModal()">Cancel</button>
-    </div>
-  </div>
-</div>
-
 <script>
-  function showPage(page) {
-    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-    document.querySelectorAll('.nav-links a').forEach(a => a.classList.remove('active'));
-    document.getElementById('page-' + page).classList.add('active');
-    document.getElementById('nav-' + page).classList.add('active');
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-  }
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach((entry, i) => {
+      if (entry.isIntersecting) {
+        setTimeout(() => entry.target.classList.add('visible'), i * 60);
+      }
+    });
+  }, { threshold: 0.08 });
+  document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
 
-  function openModal() {
-    document.getElementById('modalOverlay').classList.add('open');
-    document.body.style.overflow = 'hidden';
-  }
-
-  function closeModal() {
-    document.getElementById('modalOverlay').classList.remove('open');
-    document.body.style.overflow = '';
-  }
-
-  function closeModalOutside(e) {
-    if (e.target === document.getElementById('modalOverlay')) closeModal();
-  }
-
-  function submitBooking() {
-    alert('✅ Thank you! Your booking request has been received. We will confirm within 2 hours via phone or WhatsApp.');
-    closeModal();
-  }
+  const skillObserver = new IntersectionObserver((entries) => {
+    if (entries[0].isIntersecting) {
+      document.querySelectorAll('.skill-dots').forEach((group, gi) => {
+        const fill = parseInt(group.dataset.fill);
+        group.querySelectorAll('.dot').forEach((dot, i) => {
+          setTimeout(() => { if (i < fill) dot.classList.add('filled'); }, gi * 50 + i * 55);
+        });
+      });
+      skillObserver.disconnect();
+    }
+  }, { threshold: 0.3 });
+  const sg = document.getElementById('skillGrid');
+  if (sg) skillObserver.observe(sg);
 </script>
 </body>
 </html>
