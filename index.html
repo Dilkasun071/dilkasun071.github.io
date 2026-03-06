@@ -64,11 +64,31 @@ nav {
   padding-top: 7rem;
 }
 
+.hero-inner {
+  display: grid;
+  grid-template-columns: 1fr 340px;
+  gap: 4rem;
+  align-items: center;
+}
+
 .hero-content {
   display: flex;
   flex-direction: column;
   justify-content: center;
-  max-width: 780px;
+}
+
+.hero-photo-wrap {
+  opacity: 0;
+  animation: appear 1s 0.6s forwards;
+}
+
+.hero-photo {
+  width: 100%;
+  height: 520px;
+  object-fit: cover;
+  object-position: center top;
+  display: block;
+  filter: grayscale(10%);
 }
 
 .hero-eyebrow {
@@ -325,6 +345,71 @@ section.content {
   text-align: right;
 }
 
+/* PROFILE PHOTO */
+.about-photo {
+  width: 100%;
+  aspect-ratio: 3/4;
+  object-fit: cover;
+  object-position: center top;
+  display: block;
+  margin-bottom: 2rem;
+  filter: grayscale(15%);
+}
+
+/* EXPERIENCE */
+.timeline { display: flex; flex-direction: column; gap: 0; }
+.tl-item {
+  display: grid;
+  grid-template-columns: 160px 1fr;
+  gap: 0 3rem;
+  padding: 2.5rem 0;
+  border-bottom: 1px solid var(--line);
+}
+.tl-item:first-child { border-top: 1px solid var(--line); }
+.tl-period {
+  font-size: 0.65rem;
+  letter-spacing: 0.1em;
+  color: var(--gray);
+  text-transform: uppercase;
+  padding-top: 0.2rem;
+  line-height: 1.8;
+}
+.tl-duration {
+  font-size: 0.6rem;
+  color: var(--line);
+  display: block;
+  margin-top: 0.3rem;
+}
+.tl-role {
+  font-family: 'Cormorant Garamond', serif;
+  font-weight: 300;
+  font-size: 1.45rem;
+  line-height: 1.2;
+  margin-bottom: 0.4rem;
+}
+.tl-company {
+  font-size: 0.67rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--gray);
+  margin-bottom: 1rem;
+}
+.tl-desc {
+  font-size: 0.78rem;
+  line-height: 1.9;
+  color: var(--gray);
+  max-width: 560px;
+}
+.tl-tags { display: flex; gap: 0.5rem; flex-wrap: wrap; margin-top: 1rem; }
+.tl-tag {
+  font-size: 0.58rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--gray);
+  border: 1px solid var(--line);
+  padding: 0.2rem 0.6rem;
+}
+
 /* CONTACT */
 .contact-grid {
   display: grid;
@@ -398,10 +483,14 @@ footer {
   .nav-links { display: none; }
   #hero, section.content { padding-left: 1.5rem; padding-right: 1.5rem; }
   .hero-name { font-size: clamp(3.5rem, 15vw, 6rem); }
+  .hero-inner { grid-template-columns: 1fr; gap: 2rem; }
+  .hero-photo { height: 320px; }
   .about-grid, .skills-cols, .contact-grid { grid-template-columns: 1fr; gap: 3rem; }
   .about-sidebar { position: static; }
   .exp-row { grid-template-columns: 2rem 1fr; }
   .exp-tags { display: none; }
+  .tl-item { grid-template-columns: 1fr; gap: 0.5rem; }
+  .tl-period { font-size: 0.6rem; }
   footer { flex-direction: column; gap: 0.5rem; text-align: center; }
 }
 </style>
@@ -413,19 +502,25 @@ footer {
   <div class="nav-links">
     <a href="#about">About</a>
     <a href="#expertise">Expertise</a>
+    <a href="#experience">Experience</a>
     <a href="#skills">Skills</a>
     <a href="#contact">Contact</a>
   </div>
 </nav>
 
 <section id="hero">
-  <div class="hero-content">
-    <p class="hero-eyebrow">Founder &amp; CEO — DOT AI LABS</p>
-    <h1 class="hero-name">Kasun<br><em> Welathantrige</em></h1>
-    <p class="hero-bio">AI Developer &amp; Software Engineer building intelligent systems that solve real-world problems. Based in Sri Lanka.</p>
-    <div class="hero-cta">
-      <a href="#contact" class="link-arrow">Get in touch →</a>
-      <a href="#expertise" class="link-arrow muted">View work →</a>
+  <div class="hero-inner">
+    <div class="hero-content">
+      <p class="hero-eyebrow">Founder &amp; CEO — DOT AI LABS</p>
+      <h1 class="hero-name">Kasun<br><em> Welathantrige</em></h1>
+      <p class="hero-bio">AI Developer &amp; Software Engineer building intelligent systems that solve real-world problems. Based in Sri Lanka.</p>
+      <div class="hero-cta">
+        <a href="#contact" class="link-arrow">Get in touch →</a>
+        <a href="#expertise" class="link-arrow muted">View work →</a>
+      </div>
+    </div>
+    <div class="hero-photo-wrap">
+      <img src="profile.jpg" alt="Kasun Welathantrige" class="hero-photo">
     </div>
   </div>
   <div class="hero-footer">
@@ -441,6 +536,7 @@ footer {
   </div>
   <div class="about-grid reveal">
     <div class="about-sidebar">
+      <img src="profile.jpg" alt="Kasun Welathantrige" class="about-photo">
       <div class="about-label">Profile</div>
       <div class="credential">
         <div class="credential-title">Company</div>
@@ -497,9 +593,69 @@ footer {
   </div>
 </section>
 
-<section class="content" id="skills">
+<section class="content" id="experience">
   <div class="section-meta reveal">
     <span class="section-num">03</span>
+    <h2 class="section-heading">Work <em>experience</em></h2>
+  </div>
+  <div class="timeline reveal">
+
+    <div class="tl-item">
+      <div class="tl-period">Jan 2025 — Present<span class="tl-duration">1 yr 3 mos</span></div>
+      <div>
+        <div class="tl-role">Senior Software Engineer</div>
+        <div class="tl-company">Freelance</div>
+        <p class="tl-desc">Independent consulting and development across AI, automation, and software engineering. Founder &amp; CEO of DOT AI LABS — building intelligent solutions for businesses.</p>
+        <div class="tl-tags"><span class="tl-tag">AI</span><span class="tl-tag">n8n</span><span class="tl-tag">FastAPI</span><span class="tl-tag">WhatsApp API</span></div>
+      </div>
+    </div>
+
+    <div class="tl-item">
+      <div class="tl-period">Nov 2023 — Dec 2024<span class="tl-duration">1 yr 2 mos</span></div>
+      <div>
+        <div class="tl-role">Senior Software Engineer</div>
+        <div class="tl-company">EV Technologies · Full-time — Deputed at Sysco LABS Sri Lanka</div>
+        <p class="tl-desc">Senior engineering role deputed at Sysco LABS Sri Lanka, contributing to large-scale enterprise software systems.</p>
+        <div class="tl-tags"><span class="tl-tag">Java</span><span class="tl-tag">Spring</span><span class="tl-tag">Enterprise</span></div>
+      </div>
+    </div>
+
+    <div class="tl-item">
+      <div class="tl-period">Oct 2020 — Jul 2023<span class="tl-duration">2 yrs 10 mos</span></div>
+      <div>
+        <div class="tl-role">Software Engineer</div>
+        <div class="tl-company">DirectFN Sri Lanka · Full-time · Hybrid</div>
+        <p class="tl-desc">Over two and a half years specializing in capital markets and investment banking. Developed customizable Order Management Systems (OMS) streamlining order processing for brokerages across Colombo, Philippines, Indonesia, and Bangladesh stock markets. Collaborated with traders and stakeholders to enhance order execution and trade management.</p>
+        <div class="tl-tags"><span class="tl-tag">Java</span><span class="tl-tag">Spring</span><span class="tl-tag">Oracle</span><span class="tl-tag">EJB</span><span class="tl-tag">JBoss EAP</span><span class="tl-tag">ELK Stack</span></div>
+      </div>
+    </div>
+
+    <div class="tl-item">
+      <div class="tl-period">Jun 2019 — Mar 2020<span class="tl-duration">10 mos</span></div>
+      <div>
+        <div class="tl-role">Software Engineer</div>
+        <div class="tl-company">IFS Sri Lanka · Full-time · On-site</div>
+        <p class="tl-desc">Part of the consulting team focused on North America, Europe, and Australia. Customized IFS ERP software, collaborating with clients to optimize business processes and drive operational efficiency.</p>
+        <div class="tl-tags"><span class="tl-tag">SQL</span><span class="tl-tag">PL/SQL</span><span class="tl-tag">IFS ERP</span></div>
+      </div>
+    </div>
+
+    <div class="tl-item">
+      <div class="tl-period">Oct 2018 — Apr 2019<span class="tl-duration">7 mos</span></div>
+      <div>
+        <div class="tl-role">Software Engineer Intern</div>
+        <div class="tl-company">Intervest Software Technologies · Wellwatta · On-site</div>
+        <p class="tl-desc">Collaborated on data migration projects and contributed to software development in the travel insurance domain.</p>
+        <div class="tl-tags"><span class="tl-tag">Java</span><span class="tl-tag">Jakarta EE</span></div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<section class="content" id="skills">
+  <div class="section-meta reveal">
+    <span class="section-num">04</span>
     <h2 class="section-heading">Core <em>skills</em></h2>
   </div>
   <div class="skills-cols reveal" id="skillGrid">
@@ -584,7 +740,7 @@ footer {
 
 <section class="content" id="contact">
   <div class="section-meta reveal">
-    <span class="section-num">04</span>
+    <span class="section-num">05</span>
     <h2 class="section-heading">Get in <em>touch</em></h2>
   </div>
   <div class="contact-grid reveal">
