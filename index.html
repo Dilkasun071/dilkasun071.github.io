@@ -8,12 +8,11 @@
 <style>
   :root {
     --red: #d93025;
-    --dark: #121212;
-    --card: #1e1e1e;
-    --border: #2c2c2c;
+    --dark: #111;
+    --card: #1c1c1c;
+    --border: #2a2a2a;
     --text: #f0f0f0;
-    --muted: #888;
-    --tag-bg: rgba(217,48,37,0.15);
+    --muted: #777;
   }
 
   * { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
@@ -32,26 +31,25 @@
     position: sticky;
     top: 0;
     z-index: 50;
-    background: #0d0d0d;
+    background: #0a0a0a;
     border-bottom: 1px solid var(--border);
-    padding: 0.75rem 1rem;
+    padding: 0.8rem 1rem 0.65rem;
   }
 
   .header-row {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    margin-bottom: 0.65rem;
+    margin-bottom: 0.7rem;
   }
 
   .logo {
     font-family: 'Barlow Condensed', sans-serif;
-    font-size: 1.45rem;
+    font-size: 1.5rem;
     font-weight: 800;
-    letter-spacing: 0.04em;
+    letter-spacing: 0.05em;
     text-transform: uppercase;
   }
-
   .logo em { color: var(--red); font-style: normal; }
 
   .live-pill {
@@ -59,7 +57,7 @@
     align-items: center;
     gap: 0.35rem;
     background: rgba(217,48,37,0.12);
-    border: 1px solid rgba(217,48,37,0.3);
+    border: 1px solid rgba(217,48,37,0.35);
     border-radius: 20px;
     padding: 0.25rem 0.65rem;
     font-size: 0.64rem;
@@ -75,43 +73,40 @@
     border-radius: 50%;
     animation: blink 1.4s infinite;
   }
+  @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.2} }
 
-  @keyframes blink { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:0.3;transform:scale(0.7)} }
-
-  .regions {
-    display: flex;
-    gap: 0.4rem;
-    overflow-x: auto;
-    scrollbar-width: none;
-    padding-bottom: 2px;
+  /* TAB BUTTONS */
+  .tabs {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.45rem;
   }
-  .regions::-webkit-scrollbar { display: none; }
 
-  .region-btn {
-    flex-shrink: 0;
-    padding: 0.28rem 0.72rem;
-    border-radius: 20px;
+  .tab-btn {
+    padding: 0.55rem 0.5rem;
+    border-radius: 10px;
     border: 1px solid var(--border);
-    background: transparent;
+    background: #1a1a1a;
     color: var(--muted);
-    font-family: 'Barlow', sans-serif;
-    font-size: 0.78rem;
-    font-weight: 500;
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 0.88rem;
+    font-weight: 700;
+    letter-spacing: 0.04em;
     cursor: pointer;
+    text-align: center;
     transition: all 0.15s;
-    white-space: nowrap;
+    text-transform: uppercase;
   }
 
-  .region-btn.active {
+  .tab-btn.active {
     background: var(--red);
     border-color: var(--red);
     color: white;
-    font-weight: 600;
   }
 
   /* REFRESH BAR */
   .refresh-bar {
-    background: #181818;
+    background: #161616;
     border-bottom: 1px solid var(--border);
     padding: 0.45rem 1rem;
     display: flex;
@@ -120,16 +115,15 @@
   }
 
   .refresh-info { font-size: 0.7rem; color: var(--muted); }
-  .refresh-info span { color: #4caf50; font-weight: 600; }
+  .refresh-info b { color: #5cb85c; }
 
   .progress-wrap {
-    width: 90px;
+    width: 100px;
     height: 3px;
     background: var(--border);
     border-radius: 2px;
     overflow: hidden;
   }
-
   .progress-bar {
     height: 100%;
     background: var(--red);
@@ -140,10 +134,10 @@
 
   /* FEED */
   .feed {
-    padding: 0.75rem;
+    padding: 0.85rem 0.75rem;
     display: flex;
     flex-direction: column;
-    gap: 0.85rem;
+    gap: 1rem;
   }
 
   /* CARD */
@@ -152,69 +146,65 @@
     border-radius: 14px;
     overflow: hidden;
     border: 1px solid var(--border);
-    animation: slideUp 0.35s ease both;
+    animation: up 0.3s ease both;
   }
+  @keyframes up { from{opacity:0;transform:translateY(14px)} to{opacity:1;transform:none} }
 
-  @keyframes slideUp {
-    from { opacity:0; transform:translateY(16px); }
-    to   { opacity:1; transform:translateY(0); }
-  }
+  .card-img-wrap { position: relative; }
 
-  .card-image-wrap { position: relative; }
-
-  .card-image {
+  .card-img {
     width: 100%;
     aspect-ratio: 16/9;
     object-fit: cover;
     display: block;
-    background: #2a2a2a;
+    background: #222;
   }
 
-  .card-image-fallback {
+  .card-img-fallback {
     width: 100%;
     aspect-ratio: 16/9;
-    background: linear-gradient(135deg, #222, #2e2e2e);
+    background: #222;
     display: none;
     align-items: center;
     justify-content: center;
     font-size: 3rem;
   }
 
-  .source-badge {
+  .img-source {
     position: absolute;
-    bottom: 0.6rem;
-    left: 0.6rem;
-    background: rgba(0,0,0,0.72);
-    backdrop-filter: blur(4px);
-    border-radius: 6px;
-    padding: 0.18rem 0.5rem;
-    font-size: 0.65rem;
-    font-weight: 600;
+    bottom: 0.55rem;
+    left: 0.55rem;
+    background: rgba(0,0,0,0.75);
+    border-radius: 5px;
+    padding: 0.16rem 0.48rem;
+    font-size: 0.63rem;
+    font-weight: 700;
     color: #ddd;
     text-transform: uppercase;
     letter-spacing: 0.05em;
-  }
-
-  .time-badge {
-    position: absolute;
-    bottom: 0.6rem;
-    right: 0.6rem;
-    background: rgba(0,0,0,0.72);
     backdrop-filter: blur(4px);
-    border-radius: 6px;
-    padding: 0.18rem 0.5rem;
-    font-size: 0.65rem;
-    color: #aaa;
   }
 
-  .card-body { padding: 0.85rem 1rem 1rem; }
+  .img-time {
+    position: absolute;
+    bottom: 0.55rem;
+    right: 0.55rem;
+    background: rgba(0,0,0,0.75);
+    border-radius: 5px;
+    padding: 0.16rem 0.48rem;
+    font-size: 0.63rem;
+    color: #bbb;
+    backdrop-filter: blur(4px);
+  }
 
-  .tag-region {
+  .card-body { padding: 0.9rem 1rem 1rem; }
+
+  .region-tag {
     display: inline-block;
-    background: var(--tag-bg);
+    background: rgba(217,48,37,0.15);
     color: #ff6b5b;
     border-radius: 5px;
-    padding: 0.18rem 0.52rem;
+    padding: 0.17rem 0.5rem;
     font-size: 0.63rem;
     font-weight: 700;
     text-transform: uppercase;
@@ -224,24 +214,22 @@
 
   .card-title {
     font-family: 'Barlow Condensed', sans-serif;
-    font-size: 1.12rem;
+    font-size: 1.15rem;
     font-weight: 700;
     line-height: 1.3;
     color: var(--text);
     margin-bottom: 0.55rem;
-    letter-spacing: 0.01em;
   }
 
   .card.featured .card-title { font-size: 1.3rem; }
 
   .card-desc {
     font-size: 0.83rem;
-    line-height: 1.65;
-    color: #adadad;
-    font-weight: 400;
+    line-height: 1.68;
+    color: #aaa;
   }
 
-  .card-link {
+  .read-link {
     display: inline-flex;
     align-items: center;
     gap: 0.3rem;
@@ -253,39 +241,30 @@
   }
 
   /* SKELETON */
-  .skeleton {
-    background: var(--card);
-    border-radius: 14px;
-    border: 1px solid var(--border);
-    overflow: hidden;
-  }
-
-  .skel { background: linear-gradient(90deg,#1e1e1e 25%,#2b2b2b 50%,#1e1e1e 75%); background-size:200% 100%; animation: shimmer 1.4s infinite; }
+  .skel-card { background: var(--card); border-radius: 14px; border: 1px solid var(--border); overflow: hidden; }
+  .skel { background: linear-gradient(90deg,#1c1c1c 25%,#282828 50%,#1c1c1c 75%); background-size:200% 100%; animation:shine 1.4s infinite; }
   .skel-img { width:100%; aspect-ratio:16/9; }
-  .skel-body { padding:0.85rem 1rem 1rem; display:flex; flex-direction:column; gap:0.5rem; }
+  .skel-body { padding:0.9rem 1rem 1rem; display:flex; flex-direction:column; gap:0.5rem; }
   .skel-line { height:11px; border-radius:4px; }
+  @keyframes shine { 0%{background-position:200% 0} 100%{background-position:-200% 0} }
 
-  @keyframes shimmer { 0%{background-position:200% 0} 100%{background-position:-200% 0} }
-
-  /* STATES */
-  .msg-state {
-    text-align: center;
-    padding: 3.5rem 1.5rem;
-    color: var(--muted);
-    font-size: 0.85rem;
-    line-height: 1.8;
+  .error-state {
+    text-align:center;
+    padding:3rem 1.5rem;
+    color:var(--muted);
+    font-size:0.85rem;
+    line-height:1.8;
   }
-
-  .msg-state .icon { font-size: 2.8rem; display:block; margin-bottom:0.75rem; }
+  .error-state .ico { font-size:2.5rem; display:block; margin-bottom:0.75rem; }
 
   footer {
-    text-align: center;
-    padding: 1.5rem 1rem 2.5rem;
-    font-size: 0.67rem;
-    color: #3a3a3a;
-    line-height: 1.7;
-    border-top: 1px solid var(--border);
-    margin-top: 0.5rem;
+    text-align:center;
+    padding:1.5rem 1rem 3rem;
+    font-size:0.66rem;
+    color:#333;
+    line-height:1.8;
+    border-top:1px solid var(--border);
+    margin-top:0.5rem;
   }
 </style>
 </head>
@@ -296,181 +275,201 @@
     <div class="logo">War<em>Watch</em></div>
     <div class="live-pill"><div class="live-dot"></div> Live</div>
   </div>
-  <div class="regions" id="regions">
-    <button class="region-btn active" data-query="Ukraine Russia war news today 2026" data-label="Ukraine">🇺🇦 Ukraine</button>
-    <button class="region-btn" data-query="Gaza conflict latest news 2026" data-label="Gaza">🇵🇸 Gaza</button>
-    <button class="region-btn" data-query="Sudan civil war news today 2026" data-label="Sudan">🇸🇩 Sudan</button>
-    <button class="region-btn" data-query="Syria war news today 2026" data-label="Syria">🇸🇾 Syria</button>
-    <button class="region-btn" data-query="Myanmar conflict news 2026" data-label="Myanmar">🇲🇲 Myanmar</button>
-    <button class="region-btn" data-query="Yemen war Houthi news 2026" data-label="Yemen">🇾🇪 Yemen</button>
-    <button class="region-btn" data-query="global conflict breaking war news today 2026" data-label="World">🌍 World</button>
+  <div class="tabs">
+    <button class="tab-btn active" id="tab-iran" onclick="switchTab('iran')">🇮🇷🇮🇱🇺🇸 Iran · Israel · US</button>
+    <button class="tab-btn" id="tab-ukraine" onclick="switchTab('ukraine')">🇺🇦🇷🇺 Ukraine · Russia</button>
   </div>
 </header>
 
 <div class="refresh-bar">
-  <div class="refresh-info">Refreshes in <span id="countdown">5:00</span></div>
-  <div class="progress-wrap"><div class="progress-bar" id="progressBar"></div></div>
+  <div class="refresh-info">Refreshes in <b id="countdown">5:00</b></div>
+  <div class="progress-wrap"><div class="progress-bar" id="bar"></div></div>
 </div>
 
 <div class="feed" id="feed"></div>
 
 <footer>
-  WarWatch • Powered by Claude AI + Real-time Web Search<br>
-  Auto-refreshes every 5 minutes • Verify news at original source
+  WarWatch · Powered by Claude AI + Live Web Search<br>
+  Auto-refreshes every 5 min · Always verify at original source
 </footer>
 
 <script>
-  const REFRESH_SECS = 300;
-  let currentQuery = 'Ukraine Russia war news today 2026';
-  let timer = REFRESH_SECS;
-  let countdownInterval = null;
-  let progressInterval = null;
-  let progressElapsed = 0;
+  const TOPICS = {
+    iran: {
+      query: `Iran Israel United States war conflict military strike news March 2026`,
+      label: 'Iran · Israel · US',
+      emoji: '🌍'
+    },
+    ukraine: {
+      query: `Ukraine Russia war frontline news March 2026`,
+      label: 'Ukraine · Russia',
+      emoji: '🇺🇦'
+    }
+  };
 
-  // Region switching
-  document.getElementById('regions').addEventListener('click', e => {
-    const btn = e.target.closest('.region-btn');
-    if (!btn) return;
-    document.querySelectorAll('.region-btn').forEach(b => b.classList.remove('active'));
-    btn.classList.add('active');
-    currentQuery = btn.dataset.query;
+  let activeTopic = 'iran';
+  let timerSecs = 300;
+  let elapsed = 0;
+  let countdownTick = null;
+  let progressTick = null;
+
+  function switchTab(topic) {
+    activeTopic = topic;
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    document.getElementById('tab-' + topic).classList.add('active');
     resetTimers();
     loadNews();
-  });
+  }
 
   function resetTimers() {
-    timer = REFRESH_SECS;
-    progressElapsed = 0;
-    clearInterval(countdownInterval);
-    clearInterval(progressInterval);
-    document.getElementById('progressBar').style.width = '0%';
+    clearInterval(countdownTick);
+    clearInterval(progressTick);
+    timerSecs = 300;
+    elapsed = 0;
+    document.getElementById('bar').style.width = '0%';
     startTimers();
   }
 
   function startTimers() {
-    countdownInterval = setInterval(() => {
-      timer--;
-      const m = Math.floor(timer / 60);
-      const s = String(timer % 60).padStart(2, '0');
-      document.getElementById('countdown').textContent = `${m}:${s}`;
-      if (timer <= 0) {
-        timer = REFRESH_SECS;
+    updateCountdown();
+    countdownTick = setInterval(() => {
+      timerSecs--;
+      updateCountdown();
+      if (timerSecs <= 0) {
+        timerSecs = 300;
+        elapsed = 0;
         loadNews();
       }
     }, 1000);
 
-    progressInterval = setInterval(() => {
-      progressElapsed++;
-      const pct = (progressElapsed / REFRESH_SECS) * 100;
-      document.getElementById('progressBar').style.width = Math.min(pct, 100) + '%';
-      if (progressElapsed >= REFRESH_SECS) progressElapsed = 0;
+    progressTick = setInterval(() => {
+      elapsed++;
+      document.getElementById('bar').style.width = Math.min((elapsed / 300) * 100, 100) + '%';
+      if (elapsed >= 300) elapsed = 0;
     }, 1000);
   }
 
+  function updateCountdown() {
+    const m = Math.floor(timerSecs / 60);
+    const s = String(timerSecs % 60).padStart(2, '0');
+    document.getElementById('countdown').textContent = m + ':' + s;
+  }
+
   function showSkeletons() {
-    document.getElementById('feed').innerHTML = [1,2,3,4].map(() => `
-      <div class="skeleton">
+    document.getElementById('feed').innerHTML = [0,1,2,3].map(() => `
+      <div class="skel-card">
         <div class="skel skel-img"></div>
         <div class="skel-body">
-          <div class="skel skel-line" style="width:38%"></div>
-          <div class="skel skel-line" style="width:92%; height:15px; margin-top:2px"></div>
-          <div class="skel skel-line" style="width:75%; height:15px"></div>
-          <div class="skel skel-line" style="width:85%; margin-top:4px"></div>
-          <div class="skel skel-line" style="width:70%"></div>
-          <div class="skel skel-line" style="width:60%"></div>
+          <div class="skel skel-line" style="width:36%"></div>
+          <div class="skel skel-line" style="width:88%;height:15px;margin-top:3px"></div>
+          <div class="skel skel-line" style="width:72%;height:15px"></div>
+          <div class="skel skel-line" style="width:95%;margin-top:4px"></div>
+          <div class="skel skel-line" style="width:80%"></div>
+          <div class="skel skel-line" style="width:65%"></div>
         </div>
       </div>`).join('');
   }
 
   async function loadNews() {
     showSkeletons();
+    const topic = TOPICS[activeTopic];
 
-    const system = `You are a war and conflict news aggregator. Use web search to find the LATEST REAL news about the given topic from credible outlets (Reuters, BBC, AP, Al Jazeera, Guardian, CNN).
+    const systemPrompt = `You are a real-time war news aggregator. Use web_search to find the LATEST news published TODAY or in the last 48 hours about the given conflict.
 
-Return ONLY a raw JSON array — no markdown fences, no explanation, nothing else.
+IMPORTANT: Search multiple times if needed to find fresh, specific, real stories.
 
-Each object must have:
-- "title": punchy headline, max 12 words
-- "description": 3-4 sentences. Be SPECIFIC: name locations, people, numbers, dates. Explain what happened and why it matters.
-- "region": exact place e.g. "Zaporizhzhia, Ukraine"
-- "source": outlet name e.g. "Reuters"
-- "url": real article URL if found, else "#"
-- "time": how recent e.g. "1 hour ago", "3 hours ago", "Today"
-- "image_search": 4-6 word photo keyword string for this story e.g. "Ukraine frontline shelling soldiers"
-- "featured": true for the single most important story only, false for all others
+Return ONLY a raw JSON array — absolutely no markdown, no code fences, no explanation text before or after.
 
-Return exactly 5 items. Only real verified news. Do not fabricate anything.`;
+Each object in the array must have these exact keys:
+- "title": punchy headline max 10 words
+- "description": 3 to 4 sentences. Be very specific — include real locations, real people names if mentioned, numbers, dates, what happened and why it matters. No vague summaries.
+- "region": exact place e.g. "Tel Aviv, Israel" or "Kharkiv, Ukraine"
+- "source": news outlet e.g. "Reuters" or "BBC"
+- "url": direct article URL string, or "#" if not found
+- "time": how recent e.g. "1 hour ago" or "Today" or "Yesterday"
+- "photo_keywords": 4-5 word photo search string for this story e.g. "Iran missile strike Israel 2026"
+- "featured": boolean true for the single most important story, false for rest
+
+Return exactly 5 objects. Use ONLY real verified news from Reuters, BBC, AP, Al Jazeera, CNN, Guardian. Never fabricate.`;
 
     try {
-      const res = await fetch("https://api.anthropic.com/v1/messages", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
+      const res = await fetch('https://api.anthropic.com/v1/messages', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          model: "claude-sonnet-4-20250514",
+          model: 'claude-sonnet-4-20250514',
           max_tokens: 1000,
-          system,
-          tools: [{ type: "web_search_20250305", name: "web_search" }],
-          messages: [{ role: "user", content: `Get the latest real news: ${currentQuery}` }]
+          system: systemPrompt,
+          tools: [{ type: 'web_search_20250305', name: 'web_search' }],
+          messages: [{
+            role: 'user',
+            content: `Search the web right now and find the latest real news stories about: ${topic.query}. Find at least 5 specific recent stories with details.`
+          }]
         })
       });
 
       const data = await res.json();
-      let raw = '';
-      for (const block of data.content) {
-        if (block.type === 'text') raw += block.text;
-      }
 
-      const clean = raw.replace(/```json[\s\S]*?```|```/g, '').trim();
-      const start = clean.indexOf('[');
-      const end = clean.lastIndexOf(']');
-      const jsonStr = clean.substring(start, end + 1);
-      const articles = JSON.parse(jsonStr);
+      if (data.error) throw new Error(data.error.message);
+
+      // Extract text blocks — the final text block after tool use contains the JSON
+      const textBlocks = (data.content || []).filter(b => b.type === 'text').map(b => b.text);
+      const combined = textBlocks.join('');
+
+      // Extract JSON array robustly
+      const start = combined.indexOf('[');
+      const end = combined.lastIndexOf(']');
+      if (start === -1 || end === -1) throw new Error('No JSON array found');
+
+      const articles = JSON.parse(combined.slice(start, end + 1));
       renderCards(articles);
+
     } catch (err) {
+      console.error(err);
       document.getElementById('feed').innerHTML = `
-        <div class="msg-state">
-          <span class="icon">⚠️</span>
-          Could not load news.<br>Check your connection or try a different region.
+        <div class="error-state">
+          <span class="ico">⚠️</span>
+          Failed to load news.<br><small>${err.message}</small><br><br>
+          News will retry on next refresh cycle.
         </div>`;
     }
   }
 
-  function getPhoto(keywords, index) {
-    // Unsplash source API — real photographic images based on keywords, no auth needed
-    return `https://source.unsplash.com/800x450/?${encodeURIComponent(keywords)}&sig=${index}${Date.now()}`;
+  function getPhoto(keywords, seed) {
+    return `https://source.unsplash.com/800x450/?${encodeURIComponent(keywords)}&sig=${seed}`;
   }
 
   function renderCards(articles) {
     if (!articles || !articles.length) {
-      document.getElementById('feed').innerHTML = `<div class="msg-state"><span class="icon">📭</span>No stories found.</div>`;
+      document.getElementById('feed').innerHTML = `<div class="error-state"><span class="ico">📭</span>No stories found. Will retry shortly.</div>`;
       return;
     }
 
     const feed = document.getElementById('feed');
     feed.innerHTML = '';
 
-    const sorted = [...articles].sort((a,b) => (b.featured?1:0)-(a.featured?1:0));
+    const sorted = [...articles].sort((a,b) => (b.featured ? 1 : 0) - (a.featured ? 1 : 0));
 
     sorted.forEach((a, i) => {
       const card = document.createElement('div');
       card.className = 'card' + (a.featured ? ' featured' : '');
-      card.style.animationDelay = `${i * 0.08}s`;
+      card.style.animationDelay = (i * 0.08) + 's';
 
-      const photoUrl = getPhoto(a.image_search || 'war conflict military', i);
-      const linkHtml = a.url && a.url !== '#'
-        ? `<a class="card-link" href="${a.url}" target="_blank" rel="noopener">Read full story →</a>`
+      const photoUrl = getPhoto(a.photo_keywords || 'war conflict military', i + Date.now() % 99);
+      const linkHtml = (a.url && a.url !== '#')
+        ? `<a class="read-link" href="${a.url}" target="_blank" rel="noopener">Read full story →</a>`
         : '';
 
       card.innerHTML = `
-        <div class="card-image-wrap">
-          <img class="card-image" src="${photoUrl}" alt="${a.title}"
+        <div class="card-img-wrap">
+          <img class="card-img" src="${photoUrl}" alt="${a.title}"
             onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
-          <div class="card-image-fallback">🌍</div>
-          <span class="source-badge">${a.source || 'News'}</span>
-          <span class="time-badge">${a.time || 'Recent'}</span>
+          <div class="card-img-fallback">🌍</div>
+          <span class="img-source">${a.source || 'News'}</span>
+          <span class="img-time">${a.time || 'Recent'}</span>
         </div>
         <div class="card-body">
-          <span class="tag-region">${a.region || ''}</span>
+          <span class="region-tag">${a.region || ''}</span>
           <div class="card-title">${a.title}</div>
           <div class="card-desc">${a.description}</div>
           ${linkHtml}
